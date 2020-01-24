@@ -42,6 +42,7 @@ def login():
 @app.route("/logout")
 def logout():
     logout_user()
+    flash("Logged out!")
     return redirect(url_for("index"))
 
 
@@ -51,12 +52,16 @@ def register():
         return redirect(url_for("index"))
     form = RegistrationForm()
     if form.validate_on_submit():
-        user = User(username=form.username.data, email=form.email.data)
-        user.set_password(form.password.data)
-        db.session.add(user)
-        db.session.commit()
-        flash("Congratulations, you are now a registered user!")
-        return redirect(url_for("login"))
+        try:
+            user = User(username=form.username.data, email=form.email.data)
+            user.set_password(form.password.data)
+            db.session.add(user)
+            db.session.commit()
+            flash("Congratulations, you are now a registered user!")
+            return redirect(url_for("login"))
+        except:
+            flash("Sorry, there was an error registering your account!")
+            return redirect(url_for("login"))
     return render_template("register.html", title="Register", form=form)
 
 
@@ -66,11 +71,15 @@ def create_post():
     form = PostForm()
     time = datetime.utcnow()
     if form.validate_on_submit():
-        post = Post(user_id=current_user.id, body=form.body.data)
-        db.session.add(post)
-        db.session.commit()
-        flash("Congratulations, you have successfully created a post!")
-        return redirect(url_for("index"))
+        try:
+            post = Post(user_id=current_user.id, body=form.body.data)
+            db.session.add(post)
+            db.session.commit()
+            flash("Congratulations, you have successfully created a post!")
+            return redirect(url_for("index"))
+        except:
+            flash("Sorry, there was an error createing your post!")
+            return redirect(url_for("index"))
     return render_template("create.html", title="Create Post", form=form)
 
 
@@ -80,9 +89,11 @@ def delete(id):
     try:
         db.session.delete(post_to_delete)
         db.session.commit()
-        return redirect("/")
+        flash("Congratulations, you have successfully deleted a post!")
+        return redirect(url_for("index"))
     except:
-        return "There was an issue deleting your post"
+        flash("Sorry, there was an error deleting your post.")
+        return redirect(url_for("index"))
 
 
 @app.route("/update/<int:id>", methods=["POST", "GET"])
@@ -91,11 +102,15 @@ def update(id):
     form = UpdateForm()
     time = datetime.utcnow()
     if form.validate_on_submit():
-        post_to_update.body = form.body.data
-        db.session.add(post_to_update)
-        db.session.commit()
-        flash("Congratulations, you have successfully created a post!")
-        return redirect(url_for("index"))
+        try:
+            post_to_update.body = form.body.data
+            db.session.add(post_to_update)
+            db.session.commit()
+            flash("Congratulations, you have successfully updated a post!")
+            return redirect(url_for("index"))
+        except:
+            flash("Sorry, there was an error updating your post!")
+            return redirect(url_for("index"))
     return render_template(
         "update.html", title="Update Post", form=form, post=post_to_update
     )

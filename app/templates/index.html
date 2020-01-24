@@ -3,11 +3,14 @@
 {% block content %}
     <h1>Hi, {{ current_user.username }}!</h1>
     {% for post in posts %}
-    <div>
-        <p>{{ post.author.username }} says: <b>{{ post.body }}</b>at {{ post.timestamp }}</p>
-        <a href="/delete/{{post.id}}">delete post</a>
-        <a href="/update/{{post.id}}">update post</a>
+    <div class="w-25 border rounded p-3 m-2">
+        <p>{{ post.author.username }} says: <br/>
+            <b>{{ post.body }}</b> <br/>
+            at {{ post.timestamp }}</p>
+        <button class="btn btn-primary"><a href="/delete/{{post.id}}">delete post</a></button>
+        <button class="btn btn-danger"><a href="/update/{{post.id}}">update post</a></button>
     </div>
     {% endfor %}
-    <a href="/create">Create Post</a>
+    <br/>
+    <a href="/create">Create New Post</a>
 {% endblock %}
