@@ -4,7 +4,6 @@ from werkzeug.urls import url_parse
 from app import app, db
 from app.forms import LoginForm, RegistrationForm, PostForm, UpdateForm
 from app.models import User, Post
-from datetime import datetime
 
 
 @app.route("/")
@@ -86,6 +85,9 @@ def create_post():
 @app.route("/delete/<int:id>")
 def delete(id):
     post_to_delete = Post.query.get_or_404(id)
+    if post_to_delete.user_id is not current_user.id:
+        flash("Sorry, you are not authorized to delete that post!")
+        return redirect(url_for("index"))
     try:
         db.session.delete(post_to_delete)
         db.session.commit()
@@ -99,6 +101,9 @@ def delete(id):
 @app.route("/update/<int:id>", methods=["POST", "GET"])
 def update(id):
     post_to_update = Post.query.get_or_404(id)
+    if post_to_update.user_id is not current_user.id:
+        flash("Sorry, you are not authorized to update that post!")
+        return redirect(url_for("index"))
     form = UpdateForm()
     time = datetime.utcnow()
     if form.validate_on_submit():

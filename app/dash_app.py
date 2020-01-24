@@ -1,8 +1,3 @@
-from flask import Flask
-from flask_sqlalchemy import SQLAlchemy
-from flask_migrate import Migrate
-from flask_login import LoginManager, login_required
-from config import Config
 import dash
 import dash_html_components as html
 import dash_core_components as dcc
@@ -12,6 +7,7 @@ from datetime import datetime
 import pybaseball as pb
 import plotly.express as px
 import pandas as pd
+from app import app
 
 # Method to protect dash views/routes
 def protect_dashviews(dashapp):
@@ -22,13 +18,6 @@ def protect_dashviews(dashapp):
                 dashapp.server.view_functions[view_func]
             )
 
-
-app = Flask(__name__)
-app.config.from_object(Config)
-db = SQLAlchemy(app)
-migrate = Migrate(app, db)
-login = LoginManager(app)
-login.login_view = "login"
 
 external_stylesheets = [
     "https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
@@ -48,8 +37,6 @@ with app.app_context():
             html.Nav(
                 className="navbar",
                 children=[
-                    html.A("Home", href="/"),
-                    html.A("Logout", href="/logout"),
                     html.H1(
                         children=[
                             html.A(
@@ -258,8 +245,6 @@ with app.app_context():
 
 
 protect_dashviews(dash_app)
-
-from app import routes, models
 
 if __name__ == "__main__":
     dash_app.run_server(debug=True)

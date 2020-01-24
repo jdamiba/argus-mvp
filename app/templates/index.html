@@ -7,8 +7,8 @@
         <p>{{ post.author.username }} says: <br/>
             <b>{{ post.body }}</b> <br/>
             at {{ post.timestamp }}</p>
-        <button class="btn btn-primary"><a href="/delete/{{post.id}}">delete post</a></button>
-        <button class="btn btn-danger"><a href="/update/{{post.id}}">update post</a></button>
+        <button class="btn"><a href="/update/{{post.id}}">update post</a></button>
+        <button class="btn"><a href="/delete/{{post.id}}">delete post</a></button>
     </div>
     {% endfor %}
     <br/>
