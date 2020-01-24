@@ -216,6 +216,7 @@ with app.app_context():
 
             return [
                 dcc.Graph(figure=pitch_type_pie),
+                dcc.Graph(figure=pitch_type_bar),
                 dcc.Graph(figure=pitch_type_scatter),
                 dcc.Graph(figure=pitch_type_box),
             ]
