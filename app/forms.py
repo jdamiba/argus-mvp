@@ -28,3 +28,11 @@ class RegistrationForm(FlaskForm):
         user = User.query.filter_by(email=email.data).first()
         if user is not None:
             raise ValidationError('Please use a different email address.')
+
+class PostForm(FlaskForm):
+    body = StringField('What do you want to say?', validators=[DataRequired()])
+    submit = SubmitField('Create Post')
+    
+class UpdateForm(FlaskForm):
+    body = StringField('What do you want to update your post to say?', validators=[DataRequired()])
+    submit = SubmitField('Update Post')
