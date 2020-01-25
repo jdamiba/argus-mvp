@@ -4,6 +4,7 @@ from werkzeug.urls import url_parse
 from app import app, db
 from app.forms import LoginForm, RegistrationForm, PostForm, UpdateForm
 from app.models import User, Post
+from datetime import datetime
 
 
 @app.route("/")
