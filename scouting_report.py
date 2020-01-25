@@ -10,15 +10,15 @@ import pandas as pd
 from flask_login import login_required
 
 
-def create_dash_app(flask_app):
+def create_dash_app(flask_server):
 
     # Method to protect dash views/routes
-    def protect_dashviews(dashapp):
-        dashapp.url_base_pathname = "/dashboard/"
-        for view_func in dashapp.server.view_functions:
-            if view_func.startswith(dashapp.url_base_pathname):
-                dashapp.server.view_functions[view_func] = login_required(
-                    dashapp.server.view_functions[view_func]
+    def protect_dashviews(dash_app):
+        dash_app.url_base_pathname = "/dashboard/"
+        for view_func in dash_app.server.view_functions:
+            if view_func.startswith(dash_app.url_base_pathname):
+                dash_app.server.view_functions[view_func] = login_required(
+                    dash_app.server.view_functions[view_func]
                 )
 
     external_stylesheets = [
@@ -27,12 +27,12 @@ def create_dash_app(flask_app):
 
     dash_app = dash.Dash(
         __name__,
-        server=flask_app,
+        server=flask_server,
         url_base_pathname="/dashboard/",
         external_stylesheets=external_stylesheets,
     )
 
-    with flask_app.app_context():
+    with flask_server.app_context():
         dash_app.title = "MLB Pitcher Scouting Report"
         dash_app.layout = html.Div(
             children=[
@@ -191,7 +191,7 @@ def create_dash_app(flask_app):
                     color="Pitch Type",
                     trendline="ols",
                     hover_data=["Result of Pitch", "Play by Play"],
-                    title=f"3D Scatter Plot of {first_name} {last_name}'s Pitch Speed Between {start_date} and {end_date}",
+                    title=f"Scatter Plot of {first_name} {last_name}'s Pitch Speed Between {start_date} and {end_date}",
                     template="plotly_dark",
                 )
 

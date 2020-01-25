@@ -1,27 +1,27 @@
 from flask import render_template, flash, redirect, url_for, request
 from flask_login import login_user, logout_user, current_user, login_required
 from werkzeug.urls import url_parse
-from app import app, db
-from app.forms import LoginForm, RegistrationForm, PostForm, UpdateForm
-from app.models import User, Post
+from flask_server import flask_server, db
+from flask_server.forms import LoginForm, RegistrationForm, PostForm, UpdateForm
+from flask_server.models import User, Post
 from datetime import datetime
 
 
-@app.route("/")
-@app.route("/index")
+@flask_server.route("/")
+@flask_server.route("/index")
 @login_required
 def index():
     posts = current_user.posts
     return render_template("index.html", title="Home", posts=posts)
 
 
-@app.route("/about")
+@flask_server.route("/about")
 @login_required
 def about():
     return "about this app"
 
 
-@app.route("/login", methods=["GET", "POST"])
+@flask_server.route("/login", methods=["GET", "POST"])
 def login():
     if current_user.is_authenticated:
         return redirect(url_for("index"))
@@ -39,14 +39,14 @@ def login():
     return render_template("login.html", title="Sign In", form=form)
 
 
-@app.route("/logout")
+@flask_server.route("/logout")
 def logout():
     logout_user()
     flash("Logged out!")
     return redirect(url_for("index"))
 
 
-@app.route("/register", methods=["GET", "POST"])
+@flask_server.route("/register", methods=["GET", "POST"])
 def register():
     if current_user.is_authenticated:
         return redirect(url_for("index"))
@@ -65,7 +65,7 @@ def register():
     return render_template("register.html", title="Register", form=form)
 
 
-@app.route("/create", methods=["GET", "POST"])
+@flask_server.route("/create", methods=["GET", "POST"])
 @login_required
 def create_post():
     form = PostForm()
@@ -83,7 +83,7 @@ def create_post():
     return render_template("create.html", title="Create Post", form=form)
 
 
-@app.route("/delete/<int:id>")
+@flask_server.route("/delete/<int:id>")
 def delete(id):
     post_to_delete = Post.query.get_or_404(id)
     if post_to_delete.user_id is not current_user.id:
@@ -99,7 +99,7 @@ def delete(id):
         return redirect(url_for("index"))
 
 
-@app.route("/update/<int:id>", methods=["POST", "GET"])
+@flask_server.route("/update/<int:id>", methods=["POST", "GET"])
 def update(id):
     post_to_update = Post.query.get_or_404(id)
     if post_to_update.user_id is not current_user.id:
