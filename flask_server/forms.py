@@ -11,6 +11,15 @@ class LoginForm(FlaskForm):
     submit = SubmitField("Sign In")
 
 
+class ResetPWForm(FlaskForm):
+    password = PasswordField("Current Password", validators=[DataRequired()])
+    new_password = PasswordField("New Password", validators=[DataRequired()])
+    new_password2 = PasswordField(
+        "Repeat New Password", validators=[DataRequired(), EqualTo("new_password")]
+    )
+    submit = SubmitField("Reset Password")
+
+
 class RegistrationForm(FlaskForm):
     username = StringField("Username", validators=[DataRequired()])
     email = StringField("Email", validators=[DataRequired(), Email()])
