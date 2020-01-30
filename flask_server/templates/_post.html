@@ -1,0 +1,9 @@
+<div class="card m-2" style="width:250px;">
+    <img src="https://picsum.photos/id/{{ range(100)|random }}/250/250" alt="user avatar">
+    <div class="card-body">
+      <p class="mt-2"> <h3>{{ post.body }}</h3></p>
+      <p>at {{ post.timestamp }}</p>
+    </div>
+    <button class="btn"><a href="/update/{{post.id}}">update micropost</a></button>
+    <button class="btn"><a href="/delete/{{post.id}}">delete micropost</a></button>
+  </div>
