@@ -35,6 +35,7 @@ pathspec==0.7.0
 patsy==0.5.1
 python-dotenv==0.10.5
 plotly==4.5.0
+psycopg2==2.8.4
 pybaseball==1.0.8
 pycparser==2.18
 python-dateutil==2.8.1
