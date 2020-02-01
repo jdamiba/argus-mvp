@@ -11,7 +11,7 @@ rand_string = "".join(
 
 class Config(object):
     SECRET_KEY = os.environ.get("SECRET_KEY") or rand_string
-    SQLALCHEMY_DATABASE_URI = "mysql://b9dd0c01a98391:e7f33b31@us-cdbr-iron-east-04.cleardb.net/heroku_a9e966c60e99e3b"
+    SQLALCHEMY_DATABASE_URI = "sqlite://"
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     SQLALCHEMY_POOL_RECYCLE = 3600
     SQLALCHEMY_POOL_TIMEOUT = 20
