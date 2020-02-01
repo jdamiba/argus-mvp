@@ -13,6 +13,8 @@ class Config(object):
     SECRET_KEY = os.environ.get("SECRET_KEY") or rand_string
     SQLALCHEMY_DATABASE_URI = "mysql://bc401521a801de:76a77075@us-cdbr-iron-east-05.cleardb.net/heroku_17955da1986c614"
     SQLALCHEMY_TRACK_MODIFICATIONS = False
+    SQLALCHEMY_POOL_RECYCLE=3600
+    SQLALCHEMY_POOL_TIMEOUT=20
     MAIL_SERVER = os.environ.get("MAIL_SERVER")
     MAIL_PORT = int(os.environ.get("MAIL_PORT") or 25)
     MAIL_USE_TLS = os.environ.get("MAIL_USE_TLS") is not None
