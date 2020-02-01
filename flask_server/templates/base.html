@@ -9,15 +9,16 @@
     </head>
     <body class="container">
         <div class="row m-1 pa-1">
-            <a class="m-1 pa-1"href="{{ url_for('index') }}">Home</a>
+            <a class="m-1 pa-1" href="{{ url_for('index') }}">Home</a>
             {% if current_user.is_anonymous %}
-            <a class="m-1 pa-1"href="{{ url_for('login') }}">Login</a>
+            <a class="m-1 pa-1" href="{{ url_for('login') }}">Login</a>
             {% else %}
-            <a class="m-1 pa-1"href="{{ url_for('user', username=current_user.username) }}">Profile</a>
-            <a class="m-1 pa-1"href="{{ url_for('create_post') }}">Create New MicroPost</a>
-            <a class="m-1 pa-1"href="/dashboard">Dashboard</a>
-            <a class="m-1 pa-1"href="{{ url_for('reset_pw') }}">Reset Password</a>
-            <a class="m-1 pa-1"href="{{ url_for('logout') }}">Logout</a>
+            <a class="m-1 pa-1" href="{{ url_for('user', username=current_user.username) }}">Profile</a>
+            <a class="m-1 pa-1" href="{{ url_for('explore') }}">Explore</a>
+            <a class="m-1 pa-1" href="{{ url_for('create_post') }}">Create New MicroPost</a>
+            <a class="m-1 pa-1" href="/dashboard">Dashboard</a>
+            <a class="m-1 pa-1" href="{{ url_for('reset_pw') }}">Reset Password</a>
+            <a class="m-1 pa-1" href="{{ url_for('logout') }}">Logout</a>
             {% endif %}
         </div>
         <hr>

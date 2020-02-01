@@ -33,6 +33,7 @@ numpy==1.18.1
 pandas==0.25.3
 pathspec==0.7.0
 patsy==0.5.1
+python-dotenv==0.10.5
 plotly==4.5.0
 pybaseball==1.0.8
 pycparser==2.18
