@@ -27,7 +27,6 @@ class User(UserMixin, db.Model):
         f. [`db.Model`](https://flask-sqlalchemy.palletsprojects.com/en/2.x/api/#models) q
     
     1. What does db.relationship() do? That function returns a new property that can do multiple things. In this case we told it to point to the Post class and load multiple of those. How does it know that this will return more than one post? Because SQLAlchemy guesses a useful default from your declaration. If you would want to have a one-to-one relationship you can pass uselist=False to relationship() (this would create a one-to-one relationship).
-    
     """
 
     id = db.Column(db.Integer, primary_key=True)
