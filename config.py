@@ -11,10 +11,8 @@ rand_string = "".join(
 
 class Config(object):
     SECRET_KEY = os.environ.get("SECRET_KEY") or rand_string
-    SQLALCHEMY_DATABASE_URI = "sqlite://"
+    SQLALCHEMY_DATABASE_URI = "mysql://b7732efb8cd816:f8ce8f73@us-cdbr-iron-east-04.cleardb.net/heroku_fc83e429e10d4a9"
     SQLALCHEMY_TRACK_MODIFICATIONS = False
-    SQLALCHEMY_POOL_RECYCLE = 3600
-    SQLALCHEMY_POOL_TIMEOUT = 20
     MAIL_SERVER = os.environ.get("MAIL_SERVER")
     MAIL_PORT = int(os.environ.get("MAIL_PORT") or 25)
     MAIL_USE_TLS = os.environ.get("MAIL_USE_TLS") is not None
