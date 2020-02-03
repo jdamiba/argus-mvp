@@ -5,7 +5,7 @@ import string
 basedir = os.path.abspath(os.path.dirname(__file__))
 
 rand_string = "".join(
-    random.choice(string.ascii_uppercase + string.digits) for _ in range(10)
+    random.choice(string.ascii_uppercase + string.digits) for _ in range(30)
 )
 
 
