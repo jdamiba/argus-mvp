@@ -58,7 +58,6 @@ class RegistrationForm(FlaskForm):
 
 class PostForm(FlaskForm):
     url = StringField("Embed URL", validators=[DataRequired()])
-    body = StringField("What's awesome about this video?", validators=[DataRequired()])
     submit = SubmitField("Create Post")
 
 

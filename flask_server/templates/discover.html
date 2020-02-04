@@ -1,10 +1,6 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <h1>
-        <a href="/user/{{ current_user.username }}">{{ current_user.username }}</a>'s Feed
-    </h1>
-    
     {% if prev_url %}
         <a href="{{ prev_url }}">Newer posts</a>
         {% endif %}

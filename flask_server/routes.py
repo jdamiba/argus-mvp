@@ -19,20 +19,20 @@ methods = ["GET", "POST"]
 
 @flask_server.route("/")
 def index():
-    return redirect(url_for("explore"))
+    return redirect(url_for("discover"))
 
 
-@flask_server.route("/explore")
-def explore():
+@flask_server.route("/discover")
+def discover():
     page = request.args.get("page", 1, type=int)
     posts = Post.query.order_by(Post.timestamp.desc()).paginate(
         page, flask_server.config["POSTS_PER_PAGE"], False
     )
-    next_url = url_for("explore", page=posts.next_num) if posts.has_next else None
-    prev_url = url_for("explore", page=posts.prev_num) if posts.has_prev else None
+    next_url = url_for("discover", page=posts.next_num) if posts.has_next else None
+    prev_url = url_for("discover", page=posts.prev_num) if posts.has_prev else None
     return render_template(
-        "explore.html",
-        title="Explore",
+        "discover.html",
+        title="Discover",
         posts=posts.items,
         next_url=next_url,
         prev_url=prev_url,
@@ -88,7 +88,7 @@ def login():
         if not next_page or url_parse(next_page).netloc != "":
             next_page = url_for("feed")
         return redirect(next_page)
-    return render_template("login.html", title="Sign In", form=form)
+    return render_template("login.html", title="Log In", form=form)
 
 
 @flask_server.route("/feed")
@@ -135,7 +135,7 @@ def feed():
     prev_url = url_for("feed", page=posts.prev_num) if posts.has_prev else None
     return render_template(
         "feed.html",
-        title="Feed",
+        title="My Feed",
         posts=posts.items,
         next_url=next_url,
         prev_url=prev_url,
@@ -161,7 +161,7 @@ def logout():
     """
     logout_user()
     flash("Logged out!")
-    return redirect(url_for("explore"))
+    return redirect(url_for("discover"))
 
 
 @flask_server.route("/register", methods=methods)
@@ -274,7 +274,7 @@ def create_post():
     time = datetime.utcnow()
     if form.validate_on_submit():
         try:
-            post = Post(user_id=current_user.id, body=form.body.data, url=form.url.data)
+            post = Post(user_id=current_user.id, url=form.url.data)
             db.session.add(post)
             db.session.commit()
             flash("Congratulations, you have successfully created a post!")
@@ -372,17 +372,26 @@ def user(username):
         page, flask_server.config["POSTS_PER_PAGE"], False
     )
     next_url = (
-        url_for("user", username=user.username, page=posts.next_num)
+        url_for(
+            "user", title="User Profile", username=user.username, page=posts.next_num
+        )
         if posts.has_next
         else None
     )
     prev_url = (
-        url_for("user", username=user.username, page=posts.prev_num)
+        url_for(
+            "user", title="User Profile", username=user.username, page=posts.prev_num
+        )
         if posts.has_prev
         else None
     )
     return render_template(
-        "user.html", user=user, posts=posts.items, next_url=next_url, prev_url=prev_url
+        "user.html",
+        title="User Profile",
+        user=user,
+        posts=posts.items,
+        next_url=next_url,
+        prev_url=prev_url,
     )
 
 
@@ -406,14 +415,6 @@ def edit_profile():
 def before_request():
     if current_user.is_authenticated:
         current_user.last_seen = datetime.utcnow()
-        db.session.commit()
-
-
-@flask_server.after_request
-def after_request(response):
-    """close all database connection after each request"""
-    db.session.commit()
-    return response
 
 
 @flask_server.route("/follow/<username>")
@@ -429,7 +430,7 @@ def follow(username):
     current_user.follow(user)
     db.session.commit()
     flash("You are following {}!".format(username))
-    return redirect(url_for("user", username=username))
+    return redirect(url_for("user", title="User Profile", username=username))
 
 
 @flask_server.route("/unfollow/<username>")
@@ -441,8 +442,8 @@ def unfollow(username):
         return redirect(url_for("feed"))
     if user == current_user:
         flash("You cannot unfollow yourself!")
-        return redirect(url_for("user", username=username))
+        return redirect(url_for("user", title="User Profile", username=username))
     current_user.unfollow(user)
     db.session.commit()
     flash("You are not following {}.".format(username))
-    return redirect(url_for("user", username=username))
+    return redirect(url_for("user", title="User Profile", username=username))
