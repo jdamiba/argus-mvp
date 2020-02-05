@@ -10,8 +10,10 @@
             {% if user.about_me %}
                 <p>{{ user.about_me }}</p>
             {% endif %}
-            {% if user.last_seen %}<p>Last seen on: {{ user.last_seen }}</p>{% endif %}
-                <a><p>{{ user.followers.count() }} followers</a>, <a href="/user/{{ user.username }}/following">{{ user.followed.count() }} following.</p></a>
+            {% if user.last_seen %}
+                <p>Last seen on: {{ user.last_seen }}</p>
+            {% endif %}
+            <p><a href="/user/{{ user.username }}/following">{{ user.followed.count() }} following</a></p>
             {% if user == current_user %}
                 <p><a href="{{ url_for('edit_profile') }}">Edit your profile</a></p>
             {% elif not current_user.is_following(user) %}
