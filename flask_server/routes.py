@@ -28,8 +28,10 @@ def discover():
     posts = Post.query.order_by(Post.timestamp.desc()).paginate(
         page, flask_server.config["POSTS_PER_PAGE"], False
     )
-    next_url = url_for("discover", page=posts.next_num) if posts.has_next else None
-    prev_url = url_for("discover", page=posts.prev_num) if posts.has_prev else None
+    next_url = url_for(
+        "discover", page=posts.next_num) if posts.has_next else None
+    prev_url = url_for(
+        "discover", page=posts.prev_num) if posts.has_prev else None
     return render_template(
         "discover.html",
         title="Discover",
@@ -42,34 +44,34 @@ def discover():
 @flask_server.route("/login", methods=methods)
 def login():
     """ The controller to handle incoming GET and POST requests to the `/login` URL of the Flask web server.
-    
+
     1. Checks to see if the user is already logged in. 
         a. If so, returns a response object that redirects the client to the '/index' route.
             - Results from a GET request from an authenticated user.
-            
+
         b. If the user is not already logged in, makes the `LoginForm` (created using Flask-WTF) available to the `templates/login` view by passing it and the view as parameters to Flask's built-in `render_template()` function.
             - Results from a GET request from an unauthenticated user.
-    
+
     2. If a correct username/pw combo is submitted, then an HTTP request is made to the remote SQL database to  query it for the user database object model with the current user's `username`.
         - This operation is safe because the databse enforces unique `usernames` upon registration. Also, the `login_user()` method uses the primary key `user_id` to actually log the user in- this operation simply retrieves the user object.
         - Results from a POST request to this route when the form is sumbitted.
-    
+
     3. The user database object model is stored in a Python data structure and the controller makes it available to the Flask-Login method `login_user()` by passing it as a parameter to that method.
         a. The `login_user()` method populates Flask's [request context](https://flask.palletsprojects.com/en/1.1.x/reqcontext/) with the logged in user's database object model, which can then be accessed by this and other views and controllers./ to get information about the user.
-        
+
         b. Flask automatically pushes a new request context (`ctx`) to the stack when handling each request. View functions, error handlers, and other functions that run during the request lifecycle will have access to the [request proxy](https://flask.palletsprojects.com/en/1.1.x/api/#flask.request), which points to the request object for the current request.
-        
+
         c. Prior to a user logging in, `ctx.user` (an attribute of the request context) is an instance of the `AnonymousUserMixin` class.  After a user logs in, `ctx.user` is an instance of the User database object model defined using the Flask-SQLAlchemy extension in `flask_server/models`. 
-        
+
         d. Sucessfully calling `login_user()` creates a session, as all subsequent requests will now have access to user's database object model. Without using sessions, the user would have to send authenticated requests each time they wanted to access a protected view instead of just once at log in.
-    
+
     4. The user is redirected to the `index` view after sucessfully logging in.
-    
+
     Parameters
     ----------
     param1 : string
         The first parameter is the URL being requested by the client.
-        
+
     Returns
     -------
     str
@@ -95,7 +97,7 @@ def login():
 @login_required
 def feed():
     """ The controller to handle incoming GET requests to the root and `/index` URLs of the Flask web server.
-    
+
     1. Uses the [`@login_required decorator`](https://flask-login.readthedocs.io/en/latest/#flask_login.login_required) imported from the [Flask-Login](https://flask-login.readthedocs.io/en/latest/) extension to ensure that the current user is logged-in  before responding with the actual view. 
         a. If the user is not logged in, the [LoginManager.unauthorized() callback function](https://flask-login.readthedocs.io/en/latest/#flask_login.LoginManager.unauthorized) is fired, which redirects the user to the `/login` controller.
             - Results from a GET request from an unauthenticated user.
@@ -104,24 +106,24 @@ def feed():
                 if not current_user.is_authenticated:
                     return current_app.login_manager.unauthorized()
                 ```
-                
+
         b. If the user is logged in, then the controller retrieves their `user_id` from the current [request context](https://flask.palletsprojects.com/en/1.1.x/reqcontext/). 
             - [`Sessions`](https://flask.palletsprojects.com/en/1.1.x/api/?highlight=session#sessions) make it possible to persist data between requests (like the `user_id` of the user making requests),even though HTTP is a stateless protocol.
             - Results from a GET request from an authenticated user.
-        
+
     2. Fetches the user's posts by making an HTTP request to the remote SQL database for all posts associated with their `user_id` (which is also the primary key of the Users table).
-    
+
     3. Stores the user's posts in a Python data structure, and makes them available to the `templates/index` view by passing it and the view as parameters to Flask's built-in [`render_template()`](https://flask.palletsprojects.com/en/1.1.x/api/?highlight=render_template#flask.render_template) function.
-    
+
     4. The `templates/index` view uses [Jinja2 HTML templating](https://jinja.palletsprojects.com/en/2.10.x/) to display:
         - A list of posts created by the logged-in user with links to create/update/delete.
         - Links to view the pitcher dashboard and logout of the app.
-    
+
     Parameters
     ----------
     param1 : string
         The URL being requested by the client.
-        
+
     Returns
     -------
     str
@@ -145,15 +147,15 @@ def feed():
 @flask_server.route("/logout")
 def logout():
     """ The controller to handle incoming GET requests to the `/logout` URL of the Flask web server.
-    
+
     1. Terminates the current user's session and redirects to the `index` route. 
         - From now on, the request context user will be an instance of the `AnonymousUserMixin` class instead of an instance of a User database object model.
-    
+
     Parameters
     ----------
     param1 : string
         The first parameter is the URL being requested by the client.
-        
+
     Returns
     -------
     str
@@ -167,23 +169,23 @@ def logout():
 @flask_server.route("/register", methods=methods)
 def register():
     """ The controller to handle incoming GET and POST requests to the `/register` URL of the Flask web server.
-    
+
     1. Checks to see if the user is already logged-in and authenticated. 
         a. If so, returns a response object that redirects the client to the '/index' route.
             - Results from a GET request from an authenticated user.
-            
+
         b. If the user is not already logged-in and authenticated, makes the `RegistrationForm()` created using Flask-WTF available to the `templates/register` view by passing the view and the form as parameters to Flask's built-in `render_template()` function.
             - Results from a GET request from an unauthenticated user.
-    
+
     2. If a valid username/pw/email combo is submitted, then an HTTP request is made to the remote SQL database requesting to insert a new row into the Users table. 
-    
+
     4. The user is redirected to the `login` view. 
-    
+
     Parameters
     ----------
     param1 : string
         The first parameter is the URL being requested by the client.
-        
+
     Returns
     -------
     str
@@ -210,22 +212,22 @@ def register():
 @login_required
 def reset_pw():
     """ The controller to handle incoming GET and POST requests to the `/reset-pw` URL of the Flask web server.
-    
+
     1. Checks to see if the user is already logged-in and authenticated. 
         a. If the user is already logged-in and authenticated, makes the `ResetPWForm()` created using Flask-WTF available to the `templates/reset-pw` view by passing the view and the form as parameters to Flask's built-in `render_template()` function.
             - Results from a GET request from an authenticated user.
-            
+
         b. If the user is not already logged-in and authenticated, they are redirected to the `login` route.
-    
+
     2. If a valid current_pw/new_pw combo is submitted, then an HTTP request is made to the remote SQL database requesting to update a row in the Users table. 
-    
+
     4. The user is logged out and redirected to the `login` view. 
-    
+
     Parameters
     ----------
     param1 : string
         The first parameter is the URL being requested by the client.
-        
+
     Returns
     -------
     str
@@ -251,20 +253,20 @@ def reset_pw():
 @login_required
 def create_post():
     """ The controller to handle incoming GET and POST requests to the `/create` URL of the Flask web server.
-    
+
     1. Makes the `PostForm()` created using Flask-WTF available to the `templates/create` view by passing the view and the form as parameters to Flask's built-in `render_template()` function.
         - Results from a GET request from an authenticated user.
-    
+
     2. If data validation occurs, then an HTTP request is made to the remote SQL database requesting that a new row is inserted into the Posts table in the SQL database.
         - There is a `one-to-many relationship` between `Users` and `Posts` because the foreign key of every row in the Post table is a `user_id` of a row from the Users table. Each user can have many posts but each post has only one user.
-    
+
     3. The user is redirected to the `index` view.
-    
+
     Parameters
     ----------
     param1 : string
         The first parameter is the URL being requested by the client.
-        
+
     Returns
     -------
     str
@@ -289,18 +291,18 @@ def create_post():
 @login_required
 def delete(id):
     """ The controller to handle incoming GET requests to the `/delete` URL of the web server.
-    
+
     1. Queries the SQL datatbase for the post with the specified `id`. 
-    
+
     2. If the post was created by the logged-in user, then a row is deleted from the Posts table in the SQL database.
-        
+
     4. The user is redirected to the `index` view. 
-    
+
     Parameters
     ----------
     param1 : string
         The first parameter is the URL being requested by the client.
-        
+
     Returns
     -------
     str
@@ -323,20 +325,20 @@ def delete(id):
 @flask_server.route("/update/<int:id>", methods=methods)
 def update(id):
     """ The controller to handle incoming GET and POST requests to the `/update` URL of the web server.
-    
+
     1. Queries the SQL datatbase for the post with the specified `id`. 
-    
+
     2. If the post was created by the logged-in user, then the controller makes the `UpdatePostForm` created using Flask-WTF available to the `templates/update` view by passing the view and the form as parameters to Flask's built-in `render_template()` function.
-    
+
     3. If data validation occurs (i.e. post is acceptable), the row is updated in the Posts table in the SQL database. 
-    
+
     3. The user is redirected to the `index` view.
-    
+
     Parameters
     ----------
     param1 : string
         The first parameter is the URL being requested by the client.
-        
+
     Returns
     -------
     str
@@ -392,6 +394,16 @@ def user(username):
         posts=posts.items,
         next_url=next_url,
         prev_url=prev_url,
+    )
+
+
+@flask_server.route("/user/<username>/following")
+@login_required
+def following(username):
+    user = User.query.filter_by(username=username).first_or_404()
+    usernames = user.followed_users()
+    return render_template(
+        "following.html", title="Following", user=user, usernames=usernames
     )
 
 

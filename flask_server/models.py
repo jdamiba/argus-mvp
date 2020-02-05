@@ -71,6 +71,26 @@ class User(UserMixin, db.Model):
     def is_following(self, user):
         return self.followed.filter(followers.c.followed_id == user.id).count() == 1
 
+    def followers(self):
+        follower_posts = (
+            Post.query.join(followers, (followers.c.follower_id == Post.user_id))
+            .filter(followers.c.followed_id == self.id)
+            .all()
+        )
+
+        return set(
+            [User.query.filter_by(id=post.user_id).first() for post in follower_posts]
+        )
+
+    def followed_users(self):
+        followed = (
+            Post.query.join(followers, (followers.c.followed_id == Post.user_id))
+            .filter(followers.c.follower_id == self.id)
+            .all()
+        )
+
+        return set([User.query.filter_by(id=post.user_id).first() for post in followed])
+
     def followed_posts(self):
         followed = Post.query.join(
             followers, (followers.c.followed_id == Post.user_id)
@@ -89,10 +109,9 @@ def load_user(id):
 
 class Post(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    body = db.Column(db.String(140))
     url = db.Column(db.String(140))
     timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
     user_id = db.Column(db.Integer, db.ForeignKey("user.id"))
 
     def __repr__(self):
-        return "<Post {}>".format(self.body)
+        return "<Post {}>".format(self.url)
