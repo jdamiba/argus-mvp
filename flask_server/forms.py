@@ -57,12 +57,12 @@ class RegistrationForm(FlaskForm):
 
 
 class PostForm(FlaskForm):
-    url = StringField("Embed URL", validators=[DataRequired()])
+    url = StringField("https://www.youtube.com/watch?v=", validators=[DataRequired()])
     submit = SubmitField("Create Post")
 
 
 class UpdateForm(FlaskForm):
-    body = StringField(
-        "What do you want to update your post to say?", validators=[DataRequired()]
+    url = StringField(
+        "https://www.youtube.com/watch?v=", validators=[DataRequired()]
     )
     submit = SubmitField("Update Post")

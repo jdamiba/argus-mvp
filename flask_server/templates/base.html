@@ -17,6 +17,7 @@
             <a class="animated heartbeat m-1 pa-1" href="{{ url_for('register') }}">Register</a>
             {% else %}
             <a class="m-1 pa-1" href="{{ url_for('feed') }}">My Feed</a>
+            <a class="m-1 pa-1" href="{{ url_for('create_post') }}">Create New Post</a>
             <a class="m-1 pa-1" href="{{ url_for('user', username=current_user.username) }}">My Profile</a>
             <a class="m-1 pa-1" href="{{ url_for('reset_pw') }}">Reset Password</a>
             <a class="m-1 pa-1" href="{{ url_for('logout') }}">Logout</a>
