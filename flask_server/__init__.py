@@ -4,7 +4,7 @@ from flask_migrate import Migrate
 from flask_login import LoginManager, login_required
 from config import Config
 
-flask_server = Flask(__name__)
+flask_server = Flask(__name__, static_folder="/templates/default")
 flask_server.config.from_object(Config)
 db = SQLAlchemy(flask_server)
 migrate = Migrate(flask_server, db)

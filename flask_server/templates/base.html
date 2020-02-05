@@ -1,15 +1,16 @@
 <html>
     <head>
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+        <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
         {% if title %}
         <title>{{ title }}</title>
         {% else %}
-        <title>Joe Damiba's Infinite Playlist</title>
+        <title>Joe Damiba's Infinite Playlist (alpha version)</title>
         {% endif %}
     </head>
     <body class="container">
         <div class="row d-flex m-1 pa-1">
-            <a class="mr-auto m-1 pa-1" href="{{ url_for('index') }}"><h3>Joe Damiba's Infinite Playlist</h3></a>
+            <a class="mr-auto m-1 pa-1" href="{{ url_for('index') }}"><h3>Joe Damiba's Infinite Playlist (alpha version)</h3></a>
             {% if current_user.is_anonymous %}
             <a class="m-1 pa-1" href="{{ url_for('login') }}">Login</a>
             <a class="m-1 pa-1" href="{{ url_for('register') }}">Register</a>
@@ -31,5 +32,9 @@
         {% endif %}
         {% endwith %}
         {% block content %}{% endblock %}
+        <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+        <script>
+            AOS.init();
+        </script>
     </body>
 </html>
