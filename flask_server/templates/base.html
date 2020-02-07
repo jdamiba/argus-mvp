@@ -6,12 +6,14 @@
         {% if title %}
         <title>{{ title }}</title>
         {% else %}
-        <title>Joe Damiba's Infinite Playlist (alpha version)</title>
+        <title>Argus</title>
         {% endif %}
     </head>
     <body class="container">
         <div class="row d-flex align-items-center m-1 pa-1">
-            <a class="mr-auto m-1 pa-1" href="{{ url_for('index') }}"><h3>Joe Damiba's Infinite Playlist (alpha version)</h3></a>
+            <a class="mr-auto m-1 pa-1" href="{{ url_for('index') }}">
+                <h3>Argus (alpha version 0.0.1)</h3>
+            </a>
             {% if current_user.is_anonymous %}
             <a class="m-1 pa-1" href="{{ url_for('login') }}">Login</a>
             <a class="animated heartbeat m-1 pa-1" href="{{ url_for('register') }}">Register</a>

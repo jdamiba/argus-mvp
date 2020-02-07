@@ -28,13 +28,11 @@ def discover():
     posts = Post.query.order_by(Post.timestamp.desc()).paginate(
         page, flask_server.config["POSTS_PER_PAGE"], False
     )
-    next_url = url_for(
-        "discover", page=posts.next_num) if posts.has_next else None
-    prev_url = url_for(
-        "discover", page=posts.prev_num) if posts.has_prev else None
+    next_url = url_for("discover", page=posts.next_num) if posts.has_next else None
+    prev_url = url_for("discover", page=posts.prev_num) if posts.has_prev else None
     return render_template(
         "discover.html",
-        title="Joe Damiba's Infinite Playlist",
+        title="Argus",
         posts=posts.items,
         next_url=next_url,
         prev_url=prev_url,
@@ -165,6 +163,7 @@ def logout():
     flash("Logged out!")
     return redirect(url_for("discover"))
 
+
 @flask_server.route("/create", methods=methods)
 @login_required
 def create_post():
@@ -192,7 +191,7 @@ def create_post():
     time = datetime.utcnow()
     if form.validate_on_submit():
         try:
-            post = Post(user_id=current_user.id, url=form.url.data)
+            post = Post(user_id=current_user.id, url=form.url.data, body=form.body.data)
             db.session.add(post)
             db.session.commit()
             flash("Congratulations, you have successfully created a post!")
@@ -268,7 +267,8 @@ def update(id):
     time = datetime.utcnow()
     if form.validate_on_submit():
         try:
-            post_to_update.body = form.url.data
+            post_to_update.url = form.url.data
+            post_to_update.body = form.body.data
             db.session.add(post_to_update)
             db.session.commit()
             flash("Congratulations, you have successfully updated a post!")
@@ -279,6 +279,7 @@ def update(id):
     return render_template(
         "update.html", title="Update Post", form=form, post=post_to_update
     )
+
 
 @flask_server.route("/register", methods=methods)
 def register():

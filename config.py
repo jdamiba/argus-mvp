@@ -11,6 +11,6 @@ rand_string = "".join(
 
 class Config(object):
     SECRET_KEY = os.environ.get("SECRET_KEY") or rand_string
-    SQLALCHEMY_DATABASE_URI = os.environ.get('SQLALCHEMY_DATABASE_URI')
+    SQLALCHEMY_DATABASE_URI = os.environ.get("SQLALCHEMY_DATABASE_URI")
     SQLALCHEMY_TRACK_MODIFICATIONS = False
-    POSTS_PER_PAGE = 100
+    POSTS_PER_PAGE = 1

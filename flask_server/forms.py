@@ -13,7 +13,9 @@ class LoginForm(FlaskForm):
 
 class EditProfileForm(FlaskForm):
     username = StringField("Username", validators=[DataRequired()])
-    about_me = TextAreaField("About Me", validators=[Length(min=0, max=140)])
+    about_me = TextAreaField(
+        "The NonProfit I Support", validators=[Length(min=0, max=140)]
+    )
     submit = SubmitField("Submit")
 
     def __init__(self, original_username, *args, **kwargs):
@@ -57,12 +59,11 @@ class RegistrationForm(FlaskForm):
 
 
 class PostForm(FlaskForm):
+    body = StringField("Say something about this video:", validators=[DataRequired()])
     url = StringField("https://www.youtube.com/watch?v=", validators=[DataRequired()])
     submit = SubmitField("Create Post")
 
 
 class UpdateForm(FlaskForm):
-    url = StringField(
-        "https://www.youtube.com/watch?v=", validators=[DataRequired()]
-    )
+    url = StringField("https://www.youtube.com/watch?v=", validators=[DataRequired()])
     submit = SubmitField("Update Post")
