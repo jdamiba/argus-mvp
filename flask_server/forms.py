@@ -65,5 +65,6 @@ class PostForm(FlaskForm):
 
 
 class UpdateForm(FlaskForm):
+    body = StringField("Say something about this video:", validators=[DataRequired()])
     url = StringField("https://www.youtube.com/watch?v=", validators=[DataRequired()])
     submit = SubmitField("Update Post")

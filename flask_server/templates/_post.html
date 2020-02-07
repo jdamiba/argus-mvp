@@ -1,5 +1,5 @@
-<div data-aos="fade-in" class="card m-2" style="box-shadow: 10px 10px 5px 0px rgba(0,0,0,0.75); cursor: pointer;width:800px; border-radius: 30px;">
-  <div class="youtube" id="{{ post.url }}" style="height:600px; border-radius: 30px;"></div>
+<div data-aos="fade-in" id="card" class="card m-2" style="box-shadow: 10px 10px 5px 0px rgba(0,0,0,0.75); cursor: pointer;width:300px; border-radius: 30px;">
+  <div class="youtube" id="{{ post.url }}" style="height:300px; border-radius: 30px;"></div>
   <div class="card-body">
     {% if post.body %}
           <div>
@@ -7,14 +7,15 @@
           </div>
     {% endif %}
     <div>
-      
-      
       posted by: 
       <a href="{{ url_for('user', username=post.author.username) }}">
         {{ post.author.username }}
       </a>
     </div>
     <div>
+      <button class="btn"><a href="#" id="hide">
+          hide
+      </a></button>
       {% if post.author.id == current_user.id %}
         <button class="btn"><a href="/update/{{post.id}}">update</a></button>
         <button class="btn"><a href="/delete/{{post.id}}">delete</a></button>
@@ -22,51 +23,3 @@
     </div>
   </div>
 </div>
-
-<script>
-'use strict';
-function r(f){/in/.test(document.readyState)?setTimeout('r('+f+')',9):f()}
-r(function(){
-    if (!document.getElementsByClassName) {
-        // IE8 support
-        var getElementsByClassName = function(node, classname) {
-            var a = [];
-            var re = new RegExp('(^| )'+classname+'( |$)');
-            var els = node.getElementsByTagName("*");
-            for(var i=0,j=els.length; i<j; i++)
-                if(re.test(els[i].className))a.push(els[i]);
-            return a;
-        }
-        var videos = getElementsByClassName(document.body,"youtube");
-    } else {
-        var videos = document.getElementsByClassName("youtube");
-    }
-
-    var nb_videos = videos.length;
-    for (var i=0; i<nb_videos; i++) {
-        // Based on the YouTube ID, we can easily find the thumbnail image
-        videos[i].style.backgroundImage = 'url(https://img.youtube.com/vi/' + videos[i].id + '/3.jpg)';
-
-        // Overlay the Play icon to make it look like a video player
-        var play = document.createElement("div");
-        play.setAttribute("class","play");
-        videos[i].appendChild(play);
-
-        videos[i].onclick = function() {
-            // Create an iFrame 
-            var iframe = document.createElement("iframe");
-            var iframe_url = "https://www.youtube-nocookie.com/embed/" + this.id;
-            if (this.getAttribute("data-params")) iframe_url+='&'+this.getAttribute("data-params");
-            iframe.setAttribute("src",iframe_url);
-            iframe.setAttribute("frameborder",'0');
-
-            // The height and width of the iFrame should be the same as parent
-            iframe.style.width  = this.style.width;
-            iframe.style.height = this.style.height;
-
-            // Replace the YouTube thumbnail with YouTube Player
-            this.parentNode.replaceChild(iframe, this);
-        }
-    }
-});
-</script>

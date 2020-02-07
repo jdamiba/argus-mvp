@@ -35,7 +35,7 @@ class User(UserMixin, db.Model):
     about_me = db.Column(db.String(140))
     last_seen = db.Column(db.DateTime, default=datetime.utcnow)
     password_hash = db.Column(db.String(128))
-    is_poster = db.Column(db.Boolean, unique=False, default=False)
+    poster = db.Column(db.Boolean, unique=False, default=False)
 
     posts = db.relationship("Post", backref="author", lazy="dynamic")
     followed = db.relationship(
@@ -51,10 +51,10 @@ class User(UserMixin, db.Model):
         return "<User {}>".format(self.username)
 
     def set_poster(self, status):
-        self.is_poster = status
+        self.poster = status
 
     def is_poster(self):
-        return self.is_poster
+        return self.poster
 
     def set_password(self, password):
         self.password_hash = generate_password_hash(password)

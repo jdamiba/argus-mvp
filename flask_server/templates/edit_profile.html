@@ -2,6 +2,9 @@
 
 {% block content %}
     <h1>Edit Profile</h1>
+    {% if current_user.is_poster() %}
+        <a class="m-1 pa-1" href="{{ url_for('create_post') }}">Create New Post</a>
+    {% endif %}
     <form action="" method="post">
         {{ form.hidden_tag() }}
         <p>
